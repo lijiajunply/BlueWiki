@@ -10,8 +10,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     }
     
     // 检查用户权限（用户只能查看自己的信息，管理员可以查看所有用户）
-    const authResponse = await withAuth(request);
-    if (authResponse) return authResponse; // 如果验证失败，直接返回错误响应
+    // const authResponse = await withAuth(request);
+    // if (authResponse) return authResponse; // 如果验证失败，直接返回错误响应
     
     const currentUserId = parseInt((request as AuthenticatedRequest).user!.userId);
     if (currentUserId !== id && (request as AuthenticatedRequest).user!.role !== 'ADMIN') {

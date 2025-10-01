@@ -34,7 +34,8 @@
     "react-dom": "19.1.0",
     "react-icons": "^5.5.0",
     "redis": "^5.8.2",
-    "supercons": "^0.1.7"
+    "supercons": "^0.1.7",
+    "swagger-ui-react": "^5.29.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -48,6 +49,7 @@
     "@types/nodemailer": "^7.0.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/swagger-ui-react": "^5.18.0",
     "daisyui": "^5.1.25",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",

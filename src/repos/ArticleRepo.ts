@@ -46,8 +46,9 @@ export class ArticleRepo {
     take?: number;
     orderBy?: Prisma.ArticleOrderByWithRelationInput;
     where?: Prisma.ArticleWhereInput;
+    select?: Prisma.ArticleSelect;
   }): Promise<{ articles: Article[]; total: number }> {
-    const { skip, take, orderBy, where } = params;
+    const { skip, take, orderBy, where, select } = params;
     
     const [articles, total] = await Promise.all([
       prisma.article.findMany({
@@ -55,6 +56,7 @@ export class ArticleRepo {
         take,
         orderBy,
         where,
+        ...(select ? { select } : {}),
       }),
       prisma.article.count({ where }),
     ]);

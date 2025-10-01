@@ -1,0 +1,12 @@
+{
+    "launch": {
+        "configurations": [
+            {
+                "name": "Launch Program",
+                "type": "node",
+                "request": "launch",
+                "program": "${workspaceFolder}/app.js"
+            }
+        ]
+    }
+}

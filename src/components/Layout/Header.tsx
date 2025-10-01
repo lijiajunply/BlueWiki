@@ -5,10 +5,12 @@ import Link from 'next/link';
 import Image from "next/image";
 import Icon from 'supercons'
 import {useEffect, useState} from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
     const {user, logout} = useAuth();
-
+    const pathname = usePathname();
+    
     // Controlled state for theme toggle. This avoids issues where the DOM
     // checkbox becomes out-of-sync with application state and ensures every
     // click updates <html data-theme> and localStorage consistently.
@@ -43,16 +45,42 @@ export default function Header() {
     }, [isDark]);
 
     return (
-        <header className="bg-base-100 shadow-md z-10">
+        <header className="bg-base-100 shadow-sm z-10">
             <div className="container mx-auto px-4 py-3 flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                     <Image src='/logo.png' alt={'BlueWiki Logo'} className={'rounded-lg'} width={40} height={40}/>
                     <Link href="/" className="text-xl font-bold">Blue Wiki</Link>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <button className="btn btn-ghost btn-circle">
-                        <Icon glyph="cloud" size={32}/>
-                    </button>
+                    {/* Editor/Admin操作菜单 */}
+                    {user && (user.role === 'EDITOR' || user.role === 'ADMIN') && (
+                        <div className="dropdown dropdown-end">
+                            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+                                <Icon glyph="edit" size={24} />
+                            </div>
+                            <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                                <li>
+                                    <Link href="/articles/new">
+                                        添加页面
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href={`/articles/edit?path=${encodeURIComponent(pathname)}`}>
+                                        更改页面
+                                    </Link>
+                                </li>
+                                <li>
+                                    <button onClick={() => {
+                                        // 显示源码的逻辑可以根据需要实现
+                                        console.log('显示源码');
+                                    }}>
+                                        显示源码
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+                    
                     <label className="swap swap-rotate">
                         {/* this hidden checkbox controls the state */}
                         <input
@@ -75,7 +103,7 @@ export default function Header() {
 
                         {/* sun icon */}
                         <svg
-                            className="swap-off h-10 w-10 fill-current"
+                            className="swap-off h-6 w-6 fill-current"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24">
                             <path
@@ -84,13 +112,14 @@ export default function Header() {
 
                         {/* moon icon */}
                         <svg
-                            className="swap-on h-10 w-10 fill-current"
+                            className="swap-on h-6 w-6 fill-current"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24">
                             <path
                                 d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
                         </svg>
                     </label>
+                    
                     {user ? (
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">

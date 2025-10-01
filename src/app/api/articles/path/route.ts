@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from 'next/server';
-import {PageRepo} from '@/repos/PageRepo';
+import {ArticleRepo} from '@/repos/ArticleRepo';
 import {Article} from "@prisma/client";
 
 export async function GET(request: NextRequest) {
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
         const {searchParams} = new URL(request.url);
         const path = (searchParams.get('page') || '/');
 
-        const pageRepo = new PageRepo();
+        const pageRepo = new ArticleRepo();
 
         // 查找父目录下的内容
         const parentPath = path.substring(0, path.lastIndexOf('/')) || '/';

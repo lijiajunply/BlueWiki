@@ -24,7 +24,7 @@ export default function SidebarContent() {
             setLoading(true);
             try {
                 // 获取当前路径
-                const response = await fetch(`/api/pages/path?page=${pathname}`);
+                const response = await fetch(`/api/articles/path?page=${pathname}`);
 
                 if (response.ok) {
                     const data = await response.json();

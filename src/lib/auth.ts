@@ -1,8 +1,8 @@
 // lib/auth.ts
 import jwt from 'jsonwebtoken';
-import { getRedisClient } from './redis';
+import {getRedisClient} from './redis';
 import bcrypt from 'bcryptjs';
-import { UserRepo } from '@/repos/UserRepo';
+import {UserRepo} from '@/repos/UserRepo';
 import {User} from "@prisma/client";
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
@@ -17,7 +17,7 @@ export interface UserPayload {
 export class AuthService {
     // 生成 JWT Token
     static generateToken(payload: UserPayload): string {
-        return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+        return jwt.sign(payload, JWT_SECRET, {expiresIn: '7d'});
     }
 
     // 验证 JWT Token
@@ -59,15 +59,15 @@ export class AuthService {
     }
 
     // 根据用户ID获取完整用户信息
-    static async getUserById(userId: string): Promise<never | null> {
+    static async getUserById(userId: string): Promise<User | null> {
         try {
             const userRepo = new UserRepo();
             const user = await userRepo.findById(parseInt(userId));
             if (!user) return null;
-            
+
             // 移除密码字段
-            const { password, ...userWithoutPassword } = user;
-            return userWithoutPassword;
+            const {password, ...userWithoutPassword} = user;
+            return userWithoutPassword as User;
         } catch (error) {
             console.error('获取用户信息失败:', error);
             return null;

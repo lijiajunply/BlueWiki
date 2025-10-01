@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
-import './markdown.css';
+import type { PluginSimple } from 'markdown-it';
+import './Markdown.css';
 
 interface MarkdownProps {
   content: string;
@@ -16,10 +19,14 @@ const Markdown: React.FC<MarkdownProps> = ({ content }) => {
         const markdownItAbbr = (await import('markdown-it-abbr')).default;
         const markdownItAttrs = (await import('markdown-it-attrs')).default;
         const markdownItDecorate = (await import('markdown-it-decorate')).default;
-        const markdownItEmoji = await import('markdown-it-emoji');
+        const markdownItEmojiModule = await import('markdown-it-emoji');
+        // markdown-it-emoji exports multiple variants (e.g., { bare, full, light }), prefer `full` if present
+        const markdownItEmoji = (((markdownItEmojiModule as unknown) as { full?: PluginSimple; default?: PluginSimple }).full ?? ((markdownItEmojiModule as unknown) as { default?: PluginSimple }).default ?? ((markdownItEmojiModule as unknown) as PluginSimple)) as PluginSimple;
         const markdownItExpandTabs = (await import('markdown-it-expand-tabs')).default;
-        const markdownItFootnote = await import('markdown-it-footnote');
-        const markdownItImsize = (await import('markdown-it-imsize')).default;
+        const markdownItFootnoteModule = await import('markdown-it-footnote');
+        const markdownItFootnote = (((markdownItFootnoteModule as unknown) as { default?: PluginSimple }).default ?? ((markdownItFootnoteModule as unknown) as PluginSimple)) as PluginSimple;
+        // markdown-it-imsize depends on Node's `fs` and will break client bundling.
+        // Skip loading it in the browser build.
         const markdownItMark = (await import('markdown-it-mark')).default;
         const markdownItMultimdTable = (await import('markdown-it-multimd-table')).default;
         const markdownItSub = (await import('markdown-it-sub')).default;
@@ -33,14 +40,13 @@ const Markdown: React.FC<MarkdownProps> = ({ content }) => {
           typographer: true,
         });
 
-        // 使用插件
+        // 使用插件（不包含依赖 Node fs 的 markdown-it-imsize）
         md.use(markdownItAbbr)
           .use(markdownItAttrs)
           .use(markdownItDecorate)
-          .use(markdownItEmoji.default || markdownItEmoji)
+          .use(markdownItEmoji)
           .use(markdownItExpandTabs)
-          .use(markdownItFootnote.default || markdownItFootnote)
-          .use(markdownItImsize)
+          .use(markdownItFootnote)
           .use(markdownItMark)
           .use(markdownItMultimdTable)
           .use(markdownItSub)
@@ -62,7 +68,7 @@ const Markdown: React.FC<MarkdownProps> = ({ content }) => {
   }, [content]);
 
   return (
-    <div 
+    <div
       className="markdown-body"
       dangerouslySetInnerHTML={{ __html: htmlContent }}
     />
