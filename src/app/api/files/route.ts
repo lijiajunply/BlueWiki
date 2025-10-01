@@ -25,17 +25,29 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // 只有管理员可以创建文件记录
+    // 只有管理员可以上传文件
     const authResponse = await withAuth(request, ['ADMIN']);
     if (authResponse) return authResponse; // 如果验证失败，直接返回错误响应
     
-    const data = await request.json();
-    const fileRepo = new FileRepo();
-    const file = await fileRepo.create(data);
+    // 获取上传的文件
+    const formData = await request.formData();
+    const file = formData.get('file') as File | null;
     
-    return NextResponse.json(file, { status: 201 });
+    if (!file) {
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+    }
+    
+    // 将文件转换为 Buffer
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    
+    // 上传文件
+    const fileRepo = new FileRepo();
+    const uploadedFile = await fileRepo.uploadFile(buffer, file.name, file.type);
+    
+    return NextResponse.json(uploadedFile, { status: 201 });
   } catch (error) {
-    console.error('Failed to create file:', error);
-    return NextResponse.json({ error: 'Failed to create file' }, { status: 500 });
+    console.error('Failed to upload file:', error);
+    return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
   }
 }

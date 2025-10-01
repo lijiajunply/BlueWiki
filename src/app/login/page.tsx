@@ -33,7 +33,7 @@ export default function LoginPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-base-200">
+      <div className="min-h-screen flex items-center justify-center redirect-bg">
         <div className="loading loading-spinner loading-lg"></div>
       </div>
     );
@@ -45,7 +45,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base-200 p-4">
+    <div className="min-h-screen flex items-center justify-center redirect-bg p-4">
       <div className="card bg-base-100 w-full max-w-md shadow-lg">
         <div className="card-body">
           <h2 className="card-title text-2xl justify-center mb-6">用户登录</h2>

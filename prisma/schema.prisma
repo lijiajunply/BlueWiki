@@ -27,6 +27,7 @@ model User {
   // 关系定义
   articles Article[]
   comments Comment[]
+  Creator  Creator[]
 }
 
 model Article {
@@ -84,5 +85,15 @@ model Setting {
   smtpEmail    String   @unique
   smtpPassword String   @unique
   smtpPost     Int      @unique
-  smtpServer   Int      @unique
+  smtpServer   String   @unique
+}
+
+model Creator {
+  id     Int     @id @default(autoincrement())
+  User   User    @relation(fields: [userId], references: [id])
+  avatar String?
+  name   String
+  bio    String?
+  tags   String?
+  userId Int
 }

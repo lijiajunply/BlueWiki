@@ -20,6 +20,20 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## File Storage with MinIO
+
+This project uses MinIO as the file storage backend. To configure MinIO:
+
+1. Set up a MinIO server (either locally or using a cloud service)
+2. Create a `.env` file based on `.env.example`
+3. Update the MinIO configuration variables in your `.env` file:
+   - `MINIO_ENDPOINT`: MinIO server endpoint
+   - `MINIO_PORT`: MinIO server port (default: 9000)
+   - `MINIO_USE_SSL`: Whether to use SSL (true/false)
+   - `MINIO_ACCESS_KEY`: MinIO access key
+   - `MINIO_SECRET_KEY`: MinIO secret key
+   - `MINIO_BUCKET_NAME`: Bucket name for file storage
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

@@ -16,7 +16,14 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'File not found' }, { status: 404 });
     }
     
-    return NextResponse.json(file);
+    // 生成文件访问 URL
+    const fileUrl = await fileRepo.getFileSignedUrl(file.path);
+    
+    // 返回文件信息和访问 URL
+    return NextResponse.json({
+      ...file,
+      url: fileUrl
+    });
   } catch (error) {
     console.error('Failed to fetch file:', error);
     return NextResponse.json({ error: 'Failed to fetch file' }, { status: 500 });

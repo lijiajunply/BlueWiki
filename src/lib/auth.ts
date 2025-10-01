@@ -2,6 +2,8 @@
 import jwt from 'jsonwebtoken';
 import { getRedisClient } from './redis';
 import bcrypt from 'bcryptjs';
+import { UserRepo } from '@/repos/UserRepo';
+import {User} from "@prisma/client";
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const SALT_ROUNDS = 10;
@@ -54,6 +56,22 @@ export class AuthService {
 
         const isValid = await this.validateToken(payload.userId, token);
         return isValid ? payload : null;
+    }
+
+    // 根据用户ID获取完整用户信息
+    static async getUserById(userId: string): Promise<never | null> {
+        try {
+            const userRepo = new UserRepo();
+            const user = await userRepo.findById(parseInt(userId));
+            if (!user) return null;
+            
+            // 移除密码字段
+            const { password, ...userWithoutPassword } = user;
+            return userWithoutPassword;
+        } catch (error) {
+            console.error('获取用户信息失败:', error);
+            return null;
+        }
     }
 
     // 对密码进行加盐哈希

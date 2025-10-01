@@ -6,15 +6,7 @@ export default async function Home() {
 
     if (userCount === 0) {
         redirect('/first-use');
+    } else {
+        redirect('/home');
     }
-
-    return (
-        <div
-            className="min-h-screen flex items-center justify-center">
-            <div className="text-center">
-                <div className="text-4xl font-bold text-gray-800 mb-4">BlueWiki</div>
-                <div className="text-gray-600">正在重定向...</div>
-            </div>
-        </div>
-    );
 }
