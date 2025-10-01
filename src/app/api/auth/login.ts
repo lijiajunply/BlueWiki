@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     await AuthService.storeToken(user.id.toString(), token);
 
     // 设置 HTTP-only Cookie
-    cookies().set('auth_token', token, {
+    (await cookies()).set('auth_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',

@@ -15,64 +15,74 @@ enum Role {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  email     String    @unique
-  phone     String    @unique
+  email     String   @unique
+  phone     String   @unique
   password  String
-  role      Role      @default(USER)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // 关系定义
-  articles  Article[]
-  comments  Comment[]
+  articles Article[]
+  comments Comment[]
 }
 
 model Article {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   path      String
   title     String
   content   String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // 关系定义
-  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  Int
+  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId Int
 
-  comments  Comment[]
-  tags      Tag[]
+  comments Comment[]
+  tags     Tag[]
 }
 
 model Comment {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   content   String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // 关系定义
-  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  Int
+  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId Int
 
-  article   Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId Int
 }
 
 model Tag {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // 多对多关系
-  articles  Article[]
+  articles Article[]
 }
 
 model File {
-  id        Int       @id @default(autoincrement())
-  path      String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  hash      String    @unique
+  id        Int      @id @default(autoincrement())
+  path      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  hash      String   @unique
+}
+
+model Setting {
+  id           Int      @id @default(autoincrement())
+  googleKey    String
+  updatedAt    DateTime @updatedAt
+  smtpEmail    String   @unique
+  smtpPassword String   @unique
+  smtpPost     Int      @unique
+  smtpServer   Int      @unique
 }
